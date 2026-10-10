@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) — GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H5VLHW8761"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  // 自家裝置標記：任一頁加 ?ga=off 造訪一次，之後該瀏覽器的流量都標成 internal，
+  // 由 GA 的「內部流量」資料篩選器排除；?ga=on 解除。
+  (function(){
+    var K='ga_internal', q=location.search, internal=false;
+    try{
+      if(q.indexOf('ga=off')>-1){ localStorage.setItem(K,'1'); }
+      if(q.indexOf('ga=on')>-1){ localStorage.removeItem(K); }
+      internal = localStorage.getItem(K)==='1';
+    }catch(e){}
+    gtag('config','G-H5VLHW8761', internal ? {traffic_type:'internal'} : {});
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>金門移地教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* 版面概念：碑記式 hero（石碑刻字感）＋ 逐日行程捲軸卡片 ＋ 吸頂分頁導覽 */
+:root{
+  --bg:#f1ede3; --card:#ffffff; --ink:#2b241d; --sub:#6e6256;
+  --line:#e2dac9; --accent:#b4461f; --accent2:#8a3014;
+  --gold:#bb8a2e; --stone:#51606c; --soft:#ece2cd;
+  --good:#3a7d4f; --warn:#b4461f; --pend:#9c7a1f;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,"Microsoft JhengHei",sans-serif;
+  line-height:1.7;font-size:15px;}
+h1,h2,h3{font-family:"LXGW WenKai TC","Noto Serif TC",serif;}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px;}
+a{color:var(--accent2)}
+img{max-width:100%}
+
+/* hero */
+header.hero{
+  background:
+    radial-gradient(800px 320px at 85% -20%, rgba(187,138,46,.35), transparent 60%),
+    linear-gradient(165deg,#2d2318 0%,#3c2a1a 45%,#52301b 100%);
+  color:#f3e9d8;padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;
+}
+header.hero .eyebrow{display:inline-block;font-size:12px;letter-spacing:.18em;color:#e3c891;
+  border:1px solid rgba(227,200,145,.4);padding:4px 14px;border-radius:999px;margin-bottom:14px;}
+header.hero h1{margin:0 0 8px;font-size:30px;font-weight:700;letter-spacing:.06em;}
+header.hero .sub{opacity:.88;font-size:13.5px;max-width:520px;margin:0 auto;}
+header.hero .dates{margin-top:16px;font-size:20px;font-weight:700;color:#f3e9d8;font-variant-numeric:tabular-nums;}
+header.hero .dates span{color:#e3c891;font-weight:400;font-size:13px;margin:0 6px;}
+
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(241,237,227,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:8px 0;}
+nav.toc .in{max-width:920px;margin:0 auto;padding:0 12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.tab-btn{font-size:13.5px;font-weight:700;color:var(--sub);background:var(--card);border:1px solid var(--line);
+  padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+section{margin-top:26px;}
+section[data-tab]{display:none;}
+section[data-tab].show{display:block;}
+h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent);}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;}
+.lead{color:var(--sub);font-size:14px;max-width:70ch;}
+
+.grid{display:grid;gap:10px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:680px){.g4{grid-template-columns:repeat(2,1fr);}.g2{grid-template-columns:1fr;}}
+
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;
+  display:flex;flex-direction:column;gap:4px;justify-content:center;min-height:106px;}
+.kpi .k{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.05em;}
+.kpi .n{font-size:20px;font-weight:900;color:var(--accent2);font-variant-numeric:tabular-nums;}
+.kpi .l{font-size:11.5px;color:var(--sub);}
+
+/* day cards */
+.day{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:16px;background:var(--card);}
+.day > .dhead{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:14px 18px;
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.day > .dhead .dnum{font-family:"LXGW WenKai TC",serif;font-size:22px;font-weight:700;}
+.day > .dhead .dweek{font-size:13px;opacity:.9;}
+.day > .dhead .dtitle{margin-left:auto;font-size:13px;opacity:.95;}
+.day .rows{padding:6px 0;}
+.row{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:12px 18px;border-top:1px solid var(--line);}
+.row:first-child{border-top:none;}
+.row .time{font-weight:700;color:var(--accent2);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap;}
+.row .what{font-weight:700;font-size:14.5px;}
+.row .note{color:var(--sub);font-size:13px;margin-top:3px;}
+.row .note a{font-size:12.5px;}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;}
+.tag.meal{background:var(--soft);color:var(--gold);}
+.tag.flight{background:var(--soft);color:var(--stone);}
+@media(max-width:560px){.row{grid-template-columns:1fr;gap:3px;}}
+
+/* people */
+.plist{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;}
+.chip.leave{background:transparent;border-style:dashed;}
+.status-bar{height:10px;border-radius:999px;background:var(--soft);overflow:hidden;display:flex;margin:10px 0 4px;}
+.status-bar i{display:block;height:100%;background:var(--accent);}
+.note-box{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:12px 16px;
+  background:var(--soft);font-size:13.5px;margin-top:12px;}
+.note-box b{color:var(--accent2);}
+.watch{border-left-color:var(--warn);}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+th{color:var(--sub);font-weight:700;font-size:12.5px;}
+
+.reflist{display:grid;gap:8px;}
+.refitem{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border:1px solid var(--line);
+  border-radius:10px;background:var(--card);font-size:13.5px;}
+
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;text-align:center;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="eyebrow">逢甲大學建設學院碩專班・不動產產業發展與住宅政策分析</span>
+  <h1>金門移地教學</h1>
+  <div class="sub">官宅古厝・戰地秘境・產業交流　四日三夜深度踏查</div>
+  <div class="dates">11/11<span>→</span>11/14</div>
+</header>
+
+<nav class="toc"><div class="in">
+  <button class="tab-btn" data-tab="overview">總覽</button>
+  <button class="tab-btn" data-tab="plan">行程</button>
+  <button class="tab-btn" data-tab="stay">住宿</button>
+  <button class="tab-btn" data-tab="people">人員</button>
+  <button class="tab-btn" data-tab="cost">費用</button>
+  <button class="tab-btn" data-tab="ref">參考</button>
+</div></nav>
+
+<div class="wrap">
+
+  <!-- 總覽 -->
+  <section data-tab="overview">
+    <div class="card">
+      <p class="lead">行程安排為綜合考量移地教學及深度參訪，聯結學術與實務經驗，以深入淺出帶領參與人員認識多元面貌之金門。重點行程涵蓋金門大學、金門縣地政局／不動產公會交流，以及官宅古厝活化利用導覽、經武酒窖（觀光金獎）、戰地秘境－擎天廳、金門縣立博物館等；入住獲得 2023 年第一屆台灣觀光金獎、2024 百大金質好客民宿之閩南古厝旅店，體驗在台閩最美的濕地聚落－古寧頭。</p>
+    </div>
+
+    <div class="grid g4" style="margin-top:14px">
+      <div class="kpi"><div class="k">行程天數</div><div class="n">4 天 3 夜</div><div class="l">11/11（三）～11/14（六）</div></div>
+      <div class="kpi"><div class="k">報名現況</div><div class="n">15 / 20</div><div class="l">同學14＋全程師長1　差5人達下限</div></div>
+      <div class="kpi"><div class="k">費用</div><div class="n">19,900<span style="font-size:12px;color:var(--sub)">起</span></div><div class="l">雙人一室／位・單人24,400</div></div>
+      <div class="kpi"><div class="k">去回航班</div><div class="n">立榮航空</div><div class="l">B7-8957／B7-8958</div></div>
+    </div>
+
+    <h2 style="margin-top:28px">👤 隨行師長</h2>
+    <div class="card">
+      <table><tbody>
+        <tr><td style="width:110px"><b>陳建元 教授</b></td><td>全程同行・英國卡地夫大學城市與區域規劃博士・11/11 金大專題演講主講人之一</td></tr>
+        <tr><td><b>王靚琇 副教授</b></td><td>部分同行——11/11 先赴台北參加地政節慶祝大會，不隨團出發；11/12 晚或 11/13 即提前離隊，因 11/14 上午另有會議。交通自理。</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px"><b>⚠️ 以上行程建議為暫訂</b>　另屆時如需視天候、交通、各單位安排進行調整，還請理解；主辦單位保有最終調整、解釋之權利。</div>
+  </section>
+
+  <!-- 行程 -->
+  <section data-tab="plan">
+    <h2>🗓 逐日行程</h2>
+
+    <div class="day">
+      <div class="dhead"><span class="dnum">11/11</span><span class="dweek">星期三</span><span class="dtitle">啟程・金門大學・全牛大餐</span></div>
+      <div class="rows">
+        <div class="row"><div class="time">13:20</div><div><div class="what">機場集合並自行辦理登機</div><div class="note">1. 請攜帶身份證明文件　2. 建議至少提早於班機起飛前一小時集合報到</div></div></div>
+        <div class="row"><div class="time">14:25–15:30</div><div><div class="what">台中 → 金門<span class="tag flight">立榮 B7-8957</span></div><div class="note">飛行時間約 1 小時</div></div></div>
+        <div class="row"><div class="time">16:10–18:00</div><div><div class="what">國立金門大學</div><div class="note">拜訪都景系、專題演講活動，以及校園走訪。主講：陳建元、吳政庭教授</div></div></div>
+        <div class="row"><div class="time">18:00–19:30</div><div><div class="what">晚餐：金門牛家莊<span class="tag meal">全牛大餐</span></div><div class="note">金門最負盛名的全牛大餐，風味佳！</div></div></div>
+        <div class="row"><div class="time">20:30–</div><div><div class="what">返回民宿歇息</div><div class="note">暢聊＋品高粱</div></div></div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="dhead"><span class="dnum">11/12</span><span class="dweek">星期四</span><span class="dtitle">公會交流・地政局・經武酒窖・金城巡禮</span></div>
+      <div class="rows">
+        <div class="row"><div class="time">08:30–09:10</div><div><div class="what">民宿用早餐、整裝出發</div><div class="note">金門必吃排隊特色早餐（廣東粥、油條、石蚵麵線、閩式燒餅……）</div></div></div>
+        <div class="row"><div class="time">09:30–11:00</div><div><div class="what">拜訪金門不動產建築開發商業同業公會</div><div class="note">理事長／榮譽理事長接待，針對金門不動產建設、交易現況進行產業界相關交流</div></div></div>
+        <div class="row"><div class="time">11:00–12:00</div><div><div class="what">莒光樓</div><div class="note">金門地標及精神象徵＋金門電話亭　<a href="https://kinmen.travel/zh-tw/travel/attraction/389" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">12:00–13:00</div><div><div class="what">午餐：記德海鮮餐廳<span class="tag meal">海鮮</span></div><div class="note">在地有名的海鮮餐廳，嗆蟹、蛤仔拌麵、炸八塊是招牌</div></div></div>
+        <div class="row"><div class="time">13:30–15:30</div><div><div class="what">拜訪地政局・金門區段徵收區</div><div class="note">關嘉榮局長（逢甲校友）接待及聽取相關單位說明、交流</div></div></div>
+        <div class="row"><div class="time">16:00–17:00</div><div><div class="what">經武酒窖<span class="tag">預約16:00場次</span></div><div class="note">112 年觀光亮點獎！可參訪儲酒坑道、高粱酒介紹與試飲，必訪行程</div></div></div>
+        <div class="row"><div class="time">17:00–18:30</div><div><div class="what">金城市區巡禮（總兵署／模範街）、選逛</div><div class="note">台閩地區代表性歷史官署　<a href="https://kinmen.travel/zh-tw/travel/attraction/393" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">18:30–19:30</div><div><div class="what">晚餐：金許園<span class="tag meal">手路菜</span></div><div class="note">來金門必吃手路菜，小籠包、烤鴨值得一嚐</div></div></div>
+        <div class="row"><div class="time">19:30–</div><div><div class="what">返回民宿歇息</div><div class="note">暢聊＋品高粱</div></div></div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="dhead"><span class="dnum">11/13</span><span class="dweek">星期五</span><span class="dtitle">縣立博物館・沙美老街・山后・馬山觀測所</span></div>
+      <div class="rows">
+        <div class="row"><div class="time">08:30–09:10</div><div><div class="what">民宿用早餐＋出發</div><div class="note">金門必吃排隊特色早餐（廣東粥、油條、石蚵麵線、閩式燒餅……）</div></div></div>
+        <div class="row"><div class="time">09:30–12:00</div><div><div class="what">金門縣立博物館</div><div class="note">以金門學為基底，金門「文化路口、觀光起點」，瞭解道地文化必訪第一站</div></div></div>
+        <div class="row"><div class="time">（同時段）</div><div><div class="what">沙美市區及老街（摩洛哥）</div><div class="note">頹屋展現新生命＋傳統糕點特色　<a href="https://kinmen.travel/zh-tw/travel/attraction/1620" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">12:00–13:00</div><div><div class="what">午餐：新天地餐廳<span class="tag meal">海鮮</span></div><div class="note">東半島最負盛名的海鮮餐廳，海產粥／碳烤中卷／魚湯</div></div></div>
+        <div class="row"><div class="time">13:00–18:00</div><div><div class="what">昇恆昌金湖廣場選逛</div><div class="note">金門最具規模的免稅購物中心</div></div></div>
+        <div class="row"><div class="time">（途經）</div><div><div class="what">山后民俗文化村及獅山砲陣地</div><div class="note">砲操表演　<a href="https://kinmen.travel/zh-tw/travel/attraction/517" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">（途經）</div><div><div class="what">馬山觀測所</div><div class="note">可眺望年底啟用之對岸翔安國際機場，金廈兩岸最近據點，有「天下第一哨」之名　<a href="https://kinmen.travel/zh-tw/travel/attraction/546" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">18:00–19:30</div><div><div class="what">晚餐：喜悅小館<span class="tag meal">新中式</span></div><div class="note">金門最棒的新中式餐廳，脆皮雞、菜飯等手路菜必吃</div></div></div>
+        <div class="row"><div class="time">19:30–</div><div><div class="what">返回民宿歇息</div><div class="note">暢聊＋品高粱</div></div></div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="dhead"><span class="dnum">11/14</span><span class="dweek">星期六</span><span class="dtitle">擎天廳・陳景蘭洋樓・賦歸</span></div>
+      <div class="rows">
+        <div class="row"><div class="time">08:30–09:20</div><div><div class="what">民宿用早餐，行李上車出發</div><div class="note">金門必吃排隊特色早餐（廣東粥、油條、石蚵麵線、閩式燒餅……）</div></div></div>
+        <div class="row"><div class="time">09:50–11:30</div><div><div class="what">戰地秘境之旅：擎天廳</div><div class="note">09:50 入場。目前為金防部核心地帶管制區，需提前申請預約；金門鬼斧神工之代表作，必訪　<a href="https://kinmen.travel/zh-tw/travel/attraction/1389" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">（同時段）</div><div><div class="what">成功陳景蘭洋樓、成功坑道、金湯公園</div><div class="note">金門規模最大的洋樓，充滿故事與美拍　<a href="https://kinmen.travel/zh-tw/travel/attraction/649" target="_blank" rel="noopener">景點介紹 ↗</a></div></div></div>
+        <div class="row"><div class="time">11:30–12:10</div><div><div class="what">午餐：成功鍋貼<span class="tag meal">鍋貼</span></div><div class="note">到金門必吃鍋貼及酸辣湯</div></div></div>
+        <div class="row"><div class="time">12:20–13:15</div><div><div class="what">尚義機場報到劃位</div><div class="note">最慢 1 小時前到機場</div></div></div>
+        <div class="row"><div class="time">13:15–14:15</div><div><div class="what">金門 → 台中<span class="tag flight">立榮 B7-8958</span></div><div class="note">回到溫暖的家……下回見</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 住宿 -->
+  <section data-tab="stay">
+    <h2>🏮 住宿安排</h2>
+    <div class="card">
+      <p class="lead" style="margin-top:0">入住獲得 <b>2023 年第一屆台灣觀光金獎</b>、<b>2024 百大金質好客民宿</b> 之閩南古厝旅店：<b>古寧歇心苑</b> 及 <b>日玥居</b>、<b>湖光悠宅</b> 等，體驗在台閩最美的閩南濕地聚落－古寧頭，感受歷史之傳統閩南及官宅建築住居、人文史蹟特色解說。</p>
+      <div class="note-box watch" style="margin-top:14px"><b>待補</b>　行程單目前只列出民宿名稱，尚未標明「哪一晚住哪一間」。3 晚（11/11、11/12、11/13）的分房對照表，待承辦方（張慕白學長）確認後補上。</div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><b>古寧歇心苑</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
+      <div class="card"><b>日玥居</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
+      <div class="card"><b>湖光悠宅</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
+    </div>
+  </section>
+
+  <!-- 人員 -->
+  <section data-tab="people">
+    <h2>👥 報名現況</h2>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--sub)">
+        <span>同學 14・全程師長 1　（王老師部分同行另計）</span><span>下限 20 人</span>
+      </div>
+      <div class="status-bar"><i style="width:75%"></i></div>
+      <div style="font-size:12.5px;color:var(--sub)">10/10 更新・距下限還差 5 人</div>
+    </div>
+
+    <h2 style="margin-top:24px">✅ 參加（14 位同學）</h2>
+    <div class="card"><div class="plist">
+      <span class="chip">張新華</span><span class="chip">吳弈均</span><span class="chip">許朝勝</span>
+      <span class="chip">江麗雯</span><span class="chip">陳夙貞</span><span class="chip">陳建元</span>
+      <span class="chip">林家榛</span><span class="chip">張耀今</span><span class="chip">廖婕茹</span>
+      <span class="chip">陳紀安</span><span class="chip">王佑丞</span><span class="chip">張現傑</span>
+      <span class="chip">劉又菁</span><span class="chip">吳偉如</span>
+    </div></div>
+
+    <h2 style="margin-top:24px">🎓 隨行師長</h2>
+    <div class="card"><div class="plist">
+      <span class="chip">陳建元老師・全程</span>
+      <span class="chip">王靚琇老師・部分同行</span>
+    </div></div>
+
+    <h2 style="margin-top:24px">❓ 待確認</h2>
+    <div class="card">
+      <table><tbody>
+        <tr><td style="width:90px"><b>楊秉樺</b></td><td>人在群組但接龍兩邊皆未表態，待私訊確認</td></tr>
+        <tr><td><b>吳瑾瑜</b></td><td>非本屆修課同學，已確認是本課修課生，尚未接龍</td></tr>
+        <tr><td><b>施潔伶</b></td><td>先前曾列參加，最新版本已移至請假，待本人確認</td></tr>
+        <tr><td><b>陳柏翰</b></td><td>先前曾列參加，最新版本已移至請假，待本人確認</td></tr>
+      </tbody></table>
+    </div>
+
+    <h2 style="margin-top:24px">🙅 請假（23 位）</h2>
+    <div class="card"><div class="plist">
+      <span class="chip leave">王麗秋</span><span class="chip leave">莊尚儒</span><span class="chip leave">呂宣</span>
+      <span class="chip leave">林家德</span><span class="chip leave">呂孟玲</span><span class="chip leave">吳佳玲</span>
+      <span class="chip leave">王峻齊</span><span class="chip leave">陳志偉</span><span class="chip leave">王惠美</span>
+      <span class="chip leave">黃程豐</span><span class="chip leave">鄭文傑</span><span class="chip leave">林育生</span>
+      <span class="chip leave">廖鈺菱</span><span class="chip leave">陳衫穎</span><span class="chip leave">林振其</span>
+      <span class="chip leave">林秉賢</span><span class="chip leave">蔡輝煌</span><span class="chip leave">蔡欣嶧</span>
+      <span class="chip leave">石聰敏</span><span class="chip leave">陳鈺芬</span><span class="chip leave">梁逸輝</span>
+      <span class="chip leave">陳柏翰</span><span class="chip leave">施潔伶</span>
+    </div></div>
+  </section>
+
+  <!-- 費用 -->
+  <section data-tab="cost">
+    <h2>💰 行程費用</h2>
+    <div class="grid g2">
+      <div class="kpi" style="min-height:120px"><div class="k">雙人一室</div><div class="n">19,900<span style="font-size:13px">／位</span></div><div class="l">每房 2 人入住</div></div>
+      <div class="kpi" style="min-height:120px"><div class="k">單人一室</div><div class="n">24,400<span style="font-size:13px">／位</span></div><div class="l">單人房數量有限，先訂先得</div></div>
+    </div>
+
+    <h2 style="margin-top:24px">📦 預算含括項目</h2>
+    <div class="card">
+      <table><tbody>
+        <tr><td>✈️</td><td>台中－金門來回機票</td></tr>
+        <tr><td>🏮</td><td>金門住宿 3 晚</td></tr>
+        <tr><td>🎫</td><td>四天景點＋活動門票</td></tr>
+        <tr><td>🍽️</td><td>四天早、午、晚共 9 餐</td></tr>
+        <tr><td>🚌</td><td>四天金門交通（遊覽車行程與接送費用）＋專業導覽</td></tr>
+        <tr><td>🛡️</td><td>旅遊平安保險（200 萬／人）</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 參考 -->
+  <section data-tab="ref">
+    <h2>🔗 景點參考連結</h2>
+    <div class="reflist">
+      <div class="refitem"><span>莒光樓</span><a href="https://kinmen.travel/zh-tw/travel/attraction/389" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>金城總兵署／模範街</span><a href="https://kinmen.travel/zh-tw/travel/attraction/393" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>沙美老街（摩洛哥）</span><a href="https://kinmen.travel/zh-tw/travel/attraction/1620" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>山后民俗文化村・獅山砲陣地</span><a href="https://kinmen.travel/zh-tw/travel/attraction/517" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>馬山觀測所</span><a href="https://kinmen.travel/zh-tw/travel/attraction/546" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>擎天廳</span><a href="https://kinmen.travel/zh-tw/travel/attraction/1389" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+      <div class="refitem"><span>成功陳景蘭洋樓</span><a href="https://kinmen.travel/zh-tw/travel/attraction/649" target="_blank" rel="noopener">kinmen.travel ↗</a></div>
+    </div>
+  </section>
+
+  <footer>
+    逢甲大學建設學院碩專班 2026「移地教學」活動計畫・行程建議版本 1009<br>
+    以上行程建議為暫訂，主辦單位保有最終調整、解釋之權利。
+  </footer>
+</div>
+
+<script>
+const tabs=document.querySelectorAll('.tab-btn');
+const secs=document.querySelectorAll('section[data-tab]');
+function activate(name){
+  tabs.forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  secs.forEach(s=>s.classList.toggle('show', s.dataset.tab===name));
+  try{ localStorage.setItem('kinmen-tab', name); }catch(e){}
+}
+tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
+let initial='overview';
+try{ initial = localStorage.getItem('kinmen-tab') || 'overview'; }catch(e){}
+activate(initial);
+</script>
+</body>
+</html>

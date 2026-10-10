@@ -1,0 +1,4 @@
+# 這個 repo 是公開的 GitHub Pages，以下內容只留本機
+*.tmp
+*.bak
+.DS_Store
