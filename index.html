@@ -129,18 +129,6 @@ h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--
 .note-box b{color:var(--accent2);}
 .watch{border-left-color:var(--accent);}
 
-/* 待辦事項 */
-.todo{display:flex;flex-direction:column;gap:10px;}
-.todo-item{border:1px solid var(--line);border-radius:12px;padding:13px 16px;background:var(--card);
-  display:flex;flex-direction:column;gap:6px;}
-.todo-item .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.todo-item .t{font-weight:700;font-size:14px;flex:1 1 auto;min-width:0;}
-.todo-item .who{font-size:12px;color:var(--sub);}
-.status-chip{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap;}
-.status-chip.todo{background:rgba(184,67,43,.13);color:var(--accent2);}
-.status-chip.wait{background:rgba(187,138,46,.17);color:#8a6a1e;}
-.status-chip.progress{background:rgba(63,111,99,.16);color:var(--teal);}
-
 table{width:100%;border-collapse:collapse;font-size:13.5px;}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
 th{color:var(--sub);font-weight:700;font-size:12.5px;}
@@ -179,7 +167,6 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   <button class="tab-btn" data-tab="map">地圖</button>
   <button class="tab-btn" data-tab="stay">住宿</button>
   <button class="tab-btn" data-tab="people">人員</button>
-  <button class="tab-btn" data-tab="todo">代辦</button>
   <button class="tab-btn" data-tab="cost">費用</button>
   <button class="tab-btn" data-tab="ref">參考</button>
 </div></nav>
@@ -349,37 +336,6 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
       <span class="chip leave">石聰敏</span><span class="chip leave">陳鈺芬</span><span class="chip leave">梁逸輝</span>
       <span class="chip leave">陳柏翰</span><span class="chip leave">施潔伶</span>
     </div></div>
-  </section>
-
-  <!-- 代辦 -->
-  <section data-tab="todo">
-    <h2>✅ 代辦事項</h2>
-    <div class="todo">
-      <div class="todo-item">
-        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">催楊秉樺接龍</span></div>
-        <div class="who">人在群組但兩邊皆未表態，建議私訊而非群組公開點名</div>
-      </div>
-      <div class="todo-item">
-        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">催吳瑾瑜接龍</span></div>
-        <div class="who">已確認是本課修課同學，尚未表態參加或請假</div>
-      </div>
-      <div class="todo-item">
-        <div class="top"><span class="status-chip wait">待回覆</span><span class="t">私訊張慕白：人數門檻、報價彈性、單人房數量</span></div>
-        <div class="who">草稿已備妥，待發送｜目前 15 人（同學14＋全程師長1），距 20 人下限差 5 位</div>
-      </div>
-      <div class="todo-item">
-        <div class="top"><span class="status-chip wait">待回覆</span><span class="t">跟張慕白要 3 晚民宿分房對照表</span></div>
-        <div class="who">古寧歇心苑／日玥居／湖光悠宅，目前不知道哪一晚住哪一間</div>
-      </div>
-      <div class="todo-item">
-        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">已接龍同學回報房型意願（雙人／單人）</span></div>
-        <div class="who">單人房 24,400／位，數量有限，先訂先得</div>
-      </div>
-      <div class="todo-item">
-        <div class="top"><span class="status-chip progress">追蹤中</span><span class="t">王靚琇老師僅 11/12–13 部分同行</span></div>
-        <div class="who">統計每日車輛／座位人數時需個別扣除 11/11、11/14 兩天</div>
-      </div>
-    </div>
   </section>
 
   <!-- 費用 -->
