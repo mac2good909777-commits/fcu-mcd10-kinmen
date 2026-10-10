@@ -107,16 +107,15 @@ h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--
 .day > .dhead .dweek{font-size:13px;opacity:.9;}
 .day > .dhead .dtitle{margin-left:auto;font-size:13px;opacity:.95;}
 .day .rows{padding:6px 0;}
-.row{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:12px 18px;border-top:1px solid var(--line);}
+.row{padding:12px 18px;border-top:1px solid var(--line);}
 .row:first-child{border-top:none;}
-.row .time{font-weight:700;color:var(--accent2);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap;}
+.row .time{display:block;font-weight:700;color:var(--accent2);font-variant-numeric:tabular-nums;font-size:13px;margin-bottom:3px;}
 .row .what{font-weight:700;font-size:14.5px;}
 .row .note{color:var(--sub);font-size:13px;margin-top:3px;}
 .row .note a{font-size:12.5px;}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;}
 .tag.meal{background:var(--soft);color:var(--gold);}
 .tag.flight{background:var(--soft);color:var(--stone);}
-@media(max-width:560px){.row{grid-template-columns:1fr;gap:3px;}}
 
 /* people */
 .plist{display:flex;flex-wrap:wrap;gap:8px;}
