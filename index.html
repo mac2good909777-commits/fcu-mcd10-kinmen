@@ -122,8 +122,6 @@ h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--
 .plist{display:flex;flex-wrap:wrap;gap:8px;}
 .chip{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;}
 .chip.leave{background:transparent;border-style:dashed;}
-.status-bar{height:10px;border-radius:999px;background:var(--soft);overflow:hidden;display:flex;margin:10px 0 4px;}
-.status-bar i{display:block;height:100%;background:var(--accent);}
 .note-box{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:12px 16px;
   background:var(--soft);font-size:13.5px;margin-top:12px;}
 .note-box b{color:var(--accent2);}
@@ -181,7 +179,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
     <div class="grid g4" style="margin-top:14px">
       <div class="kpi"><div class="k">行程天數</div><div class="n">4 天 3 夜</div><div class="l">11/11（三）～11/14（六）</div></div>
-      <div class="kpi"><div class="k">報名現況</div><div class="n">15 / 20</div><div class="l">同學14＋全程師長1　差5人達下限</div></div>
+      <div class="kpi"><div class="k">報名現況</div><div class="n">15 人</div><div class="l">同學 14＋全程師長 1</div></div>
       <div class="kpi"><div class="k">費用</div><div class="n">19,900<span style="font-size:12px;color:var(--sub)">起</span></div><div class="l">雙人一室／位・單人24,400</div></div>
       <div class="kpi"><div class="k">去回航班</div><div class="n">立榮航空</div><div class="l">B7-8957／B7-8958</div></div>
     </div>
@@ -285,9 +283,19 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
       <div class="note-box watch" style="margin-top:14px"><b>待補</b>　行程單目前只列出民宿名稱，尚未標明「哪一晚住哪一間」。3 晚（11/11、11/12、11/13）的分房對照表，待承辦方（張慕白學長）確認後補上。</div>
     </div>
     <div class="grid g3" style="margin-top:14px">
-      <div class="card"><b>古寧歇心苑</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
-      <div class="card"><b>日玥居</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
-      <div class="card"><b>湖光悠宅</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
+      <div class="card">
+        <b>古寧歇心苑</b>
+        <div class="lead" style="margin-top:6px">金寧鄉北山聚落古厝活化而成，曾獲第一屆台灣觀光金獎。日光露台、免費 WiFi、腳踏車、戶外壁爐與野餐區。距尚義機場約 9 公里。</div>
+      </div>
+      <div class="card">
+        <b>日玥居</b>
+        <div class="lead" style="margin-top:6px">金寧鄉南山聚落（古寧頭三聚落之一），百年古厝翻修，傳統建築結合現代化設備。</div>
+      </div>
+      <div class="card">
+        <b>湖光悠宅</b>
+        <div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div>
+        <div class="lead" style="margin-top:4px;font-size:12px">網路查無公開資料，待向張慕白學長確認地址與特色。</div>
+      </div>
     </div>
   </section>
 
@@ -295,11 +303,8 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   <section data-tab="people">
     <h2>👥 報名現況</h2>
     <div class="card">
-      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--sub)">
-        <span>同學 14・全程師長 1　（王老師部分同行另計）</span><span>下限 20 人</span>
-      </div>
-      <div class="status-bar"><i style="width:75%"></i></div>
-      <div style="font-size:12.5px;color:var(--sub)">10/10 更新・距下限還差 5 人</div>
+      <div style="font-size:14px;font-weight:700">同學 14・全程師長 1　<span style="font-weight:400;color:var(--sub);font-size:13px">（王老師部分同行另計）</span></div>
+      <div style="font-size:12.5px;color:var(--sub);margin-top:6px">10/10 更新</div>
     </div>
 
     <h2 style="margin-top:24px">✅ 參加（14 位同學）</h2>
@@ -321,7 +326,6 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
     <div class="card">
       <div class="infolist">
         <div class="info-row"><div class="lbl">楊秉樺</div><div class="txt muted">人在群組但接龍兩邊皆未表態，待私訊確認</div></div>
-        <div class="info-row"><div class="lbl">吳瑾瑜</div><div class="txt muted">非本屆修課同學，已確認是本課修課生，尚未接龍</div></div>
       </div>
     </div>
 
@@ -381,8 +385,10 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// 日期色票
+// 日期色票與「第幾天」標示
 const DAYC = {'11/11':'#b8432b','11/12':'#bb8a2e','11/13':'#3f6f63','11/14':'#6a4fae'};
+const DAYN = {'11/11':'第1天','11/12':'第2天','11/13':'第3天','11/14':'第4天'};
+function dayLabel(d){ return DAYN[d] ? DAYN[d]+'　'+d : d; }
 function gmap(q){ return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q); }
 
 // approx:true 表示地址未能查得精確門牌，座標為概略位置（僅供整體方位參考，導航請用連結）
@@ -426,7 +432,9 @@ function initMap(){
     const color = DAYC[s.day] || '#8d887c';
     const m = L.circleMarker([s.lat,s.lng],
       {radius:8, color:'#fff', weight:2, fillColor:color, fillOpacity:1, dashArray:s.approx?'2,2':null}).addTo(map);
-    m.bindPopup('<b>'+s.name+'</b><br><span style="color:#666;font-size:12px">'+s.ds+(s.approx?'　<i>(位置概略)</i>':'')+'</span><br>'+
+    const dLabel = s.day==='住宿' ? '住宿' : dayLabel(s.day);
+    m.bindPopup('<b>'+s.name+'</b><br><span style="color:#999;font-size:11px">'+dLabel+'</span><br>'+
+      '<span style="color:#666;font-size:12px">'+s.ds+(s.approx?'　<i>(位置概略)</i>':'')+'</span><br>'+
       '<a href="'+gmap(s.q)+'" target="_blank" style="color:#b8432b;font-weight:700">→ Google 地圖導航</a>');
     bounds.push([s.lat,s.lng]);
   });
@@ -437,7 +445,7 @@ function initMap(){
 const legend = document.getElementById('legend');
 Object.keys(DAYC).forEach(d=>{
   const el = document.createElement('span');
-  el.innerHTML = '<i style="background:'+DAYC[d]+'"></i>'+d;
+  el.innerHTML = '<i style="background:'+DAYC[d]+'"></i>'+dayLabel(d);
   legend.appendChild(el);
 });
 const el2 = document.createElement('span');
@@ -448,9 +456,10 @@ legend.appendChild(el2);
 const ul = document.getElementById('spotlist');
 const dayOrder = ['11/11','11/12','11/13','11/14','住宿'];
 dayOrder.forEach(d=>{
+  const dLabel = d==='住宿' ? '住宿' : dayLabel(d);
   spots.filter(s=>s.day===d).forEach(s=>{
     const li = document.createElement('li');
-    li.innerHTML = '<span class="nm">'+d+'　'+s.name+(s.approx?' <span class="approx">(位置概略)</span>':'')+'</span>'+
+    li.innerHTML = '<span class="nm">'+dLabel+'　'+s.name+(s.approx?' <span class="approx">(位置概略)</span>':'')+'</span>'+
       '<a href="'+gmap(s.q)+'" target="_blank">地圖 ↗</a>';
     ul.appendChild(li);
   });
