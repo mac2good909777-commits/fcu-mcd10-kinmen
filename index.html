@@ -22,17 +22,16 @@
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>金門移地教學</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/* 版面概念：碑記式 hero（石碑刻字感）＋ 逐日行程捲軸卡片 ＋ 吸頂分頁導覽 */
+/* 版面概念：莒光樓實景為 hero 底圖（花崗岩灰＋硃紅＋琉璃綠取自原照）＋ 逐日行程捲軸卡片 ＋ 吸頂分頁導覽 */
 :root{
-  --bg:#f1ede3; --card:#ffffff; --ink:#2b241d; --sub:#6e6256;
-  --line:#e2dac9; --accent:#b4461f; --accent2:#8a3014;
-  --gold:#bb8a2e; --stone:#51606c; --soft:#ece2cd;
-  --good:#3a7d4f; --warn:#b4461f; --pend:#9c7a1f;
-  color-scheme:light;
+  --bg:#f3efe6; --card:#ffffff; --ink:#2a2620; --sub:#6d665b;
+  --line:#e3dcca; --accent:#b8432b; --accent2:#8f3420;
+  --gold:#bb8a2e; --stone:#8d887c; --teal:#3f6f63; --leaf:#4f7a3f; --soft:#ece3cf;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;}
@@ -43,21 +42,24 @@ h1,h2,h3{font-family:"LXGW WenKai TC","Noto Serif TC",serif;}
 a{color:var(--accent2)}
 img{max-width:100%}
 
-/* hero */
+/* hero：實景照片底圖 */
 header.hero{
   background:
-    radial-gradient(800px 320px at 85% -20%, rgba(187,138,46,.35), transparent 60%),
-    linear-gradient(165deg,#2d2318 0%,#3c2a1a 45%,#52301b 100%);
-  color:#f3e9d8;padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;
+    linear-gradient(180deg, rgba(30,22,15,.30) 0%, rgba(50,24,14,.55) 55%, rgba(60,26,14,.82) 100%),
+    url("assets/zhuguang-lou.webp");
+  background-size:cover; background-position:center 38%; background-repeat:no-repeat;
+  color:#fbf3e4;padding:48px 20px 38px;text-align:center;position:relative;overflow:hidden;
+  text-shadow:0 2px 10px rgba(0,0,0,.5);
 }
-header.hero .eyebrow{display:inline-block;font-size:12px;letter-spacing:.18em;color:#e3c891;
-  border:1px solid rgba(227,200,145,.4);padding:4px 14px;border-radius:999px;margin-bottom:14px;}
+header.hero .eyebrow{display:inline-block;font-size:12px;letter-spacing:.16em;color:#f0dcb0;
+  border:1px solid rgba(240,220,176,.45);padding:4px 14px;border-radius:999px;margin-bottom:14px;background:rgba(0,0,0,.18);}
 header.hero h1{margin:0 0 8px;font-size:30px;font-weight:700;letter-spacing:.06em;}
-header.hero .sub{opacity:.88;font-size:13.5px;max-width:520px;margin:0 auto;}
-header.hero .dates{margin-top:16px;font-size:20px;font-weight:700;color:#f3e9d8;font-variant-numeric:tabular-nums;}
-header.hero .dates span{color:#e3c891;font-weight:400;font-size:13px;margin:0 6px;}
+header.hero .sub{opacity:.92;font-size:13.5px;max-width:520px;margin:0 auto;}
+header.hero .dates{margin-top:16px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+header.hero .dates span{color:#f0dcb0;font-weight:400;font-size:13px;margin:0 6px;}
+header.hero .credit{position:absolute;right:10px;bottom:6px;font-size:10px;color:rgba(255,255,255,.55);text-shadow:none;}
 
-nav.toc{position:sticky;top:0;z-index:50;background:rgba(241,237,227,.92);
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(243,239,230,.93);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:8px 0;}
 nav.toc .in{max-width:920px;margin:0 auto;padding:0 12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
 .tab-btn{font-size:13.5px;font-weight:700;color:var(--sub);background:var(--card);border:1px solid var(--line);
@@ -74,14 +76,28 @@ h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--
 
 .grid{display:grid;gap:10px;}
 .g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
 .g2{grid-template-columns:repeat(2,1fr);}
-@media(max-width:680px){.g4{grid-template-columns:repeat(2,1fr);}.g2{grid-template-columns:1fr;}}
+@media(max-width:680px){.g4{grid-template-columns:repeat(2,1fr);}.g3{grid-template-columns:1fr;}.g2{grid-template-columns:1fr;}}
 
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;
   display:flex;flex-direction:column;gap:4px;justify-content:center;min-height:106px;}
 .kpi .k{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.05em;}
 .kpi .n{font-size:20px;font-weight:900;color:var(--accent2);font-variant-numeric:tabular-nums;}
 .kpi .l{font-size:11.5px;color:var(--sub);}
+
+/* 堆疊資訊列（取代窄螢幕上擁擠的表格） */
+.infolist{display:flex;flex-direction:column;}
+.info-row{padding:12px 0;border-top:1px solid var(--line);}
+.info-row:first-child{border-top:none;padding-top:0;}
+.info-row .lbl{font-weight:800;color:var(--accent2);font-size:14px;margin-bottom:3px;}
+.info-row .txt{color:var(--ink);font-size:13.5px;}
+.info-row .txt.muted{color:var(--sub);}
+
+.budgetlist{display:flex;flex-direction:column;gap:2px;}
+.budgetrow{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;}
+.budgetrow:first-child{border-top:none;}
+.budgetrow .ic{flex:0 0 22px;}
 
 /* day cards */
 .day{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:16px;background:var(--card);}
@@ -111,15 +127,38 @@ h2{font-size:19px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--
 .note-box{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:12px 16px;
   background:var(--soft);font-size:13.5px;margin-top:12px;}
 .note-box b{color:var(--accent2);}
-.watch{border-left-color:var(--warn);}
+.watch{border-left-color:var(--accent);}
+
+/* 待辦事項 */
+.todo{display:flex;flex-direction:column;gap:10px;}
+.todo-item{border:1px solid var(--line);border-radius:12px;padding:13px 16px;background:var(--card);
+  display:flex;flex-direction:column;gap:6px;}
+.todo-item .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.todo-item .t{font-weight:700;font-size:14px;flex:1 1 auto;min-width:0;}
+.todo-item .who{font-size:12px;color:var(--sub);}
+.status-chip{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap;}
+.status-chip.todo{background:rgba(184,67,43,.13);color:var(--accent2);}
+.status-chip.wait{background:rgba(187,138,46,.17);color:#8a6a1e;}
+.status-chip.progress{background:rgba(63,111,99,.16);color:var(--teal);}
 
 table{width:100%;border-collapse:collapse;font-size:13.5px;}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
 th{color:var(--sub);font-weight:700;font-size:12.5px;}
 
 .reflist{display:grid;gap:8px;}
-.refitem{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border:1px solid var(--line);
-  border-radius:10px;background:var(--card);font-size:13.5px;}
+.refitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line);
+  border-radius:10px;background:var(--card);font-size:13.5px;flex-wrap:wrap;}
+
+/* 地圖 */
+#map{height:440px;border-radius:14px;border:1px solid var(--line);z-index:1;}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:12.5px;color:var(--sub);}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);}
+.spotlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
+.spotlist li{padding:10px 0;border-top:1px solid var(--line);font-size:13.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.spotlist li:first-child{border-top:none;}
+.spotlist .nm{font-weight:700;}
+.spotlist .approx{font-size:11px;color:var(--sub);font-weight:400;}
 
 footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;text-align:center;}
 </style>
@@ -131,13 +170,16 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   <h1>金門移地教學</h1>
   <div class="sub">官宅古厝・戰地秘境・產業交流　四日三夜深度踏查</div>
   <div class="dates">11/11<span>→</span>11/14</div>
+  <div class="credit">背景：莒光樓與金門電話亭</div>
 </header>
 
 <nav class="toc"><div class="in">
   <button class="tab-btn" data-tab="overview">總覽</button>
   <button class="tab-btn" data-tab="plan">行程</button>
+  <button class="tab-btn" data-tab="map">地圖</button>
   <button class="tab-btn" data-tab="stay">住宿</button>
   <button class="tab-btn" data-tab="people">人員</button>
+  <button class="tab-btn" data-tab="todo">代辦</button>
   <button class="tab-btn" data-tab="cost">費用</button>
   <button class="tab-btn" data-tab="ref">參考</button>
 </div></nav>
@@ -159,10 +201,18 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
     <h2 style="margin-top:28px">👤 隨行師長</h2>
     <div class="card">
-      <table><tbody>
-        <tr><td style="width:110px"><b>陳建元 教授</b></td><td>全程同行・英國卡地夫大學城市與區域規劃博士・11/11 金大專題演講主講人之一</td></tr>
-        <tr><td><b>王靚琇 副教授</b></td><td>部分同行——11/11 先赴台北參加地政節慶祝大會，不隨團出發；11/12 晚或 11/13 即提前離隊，因 11/14 上午另有會議。交通自理。</td></tr>
-      </tbody></table>
+      <div class="infolist">
+        <div class="info-row"><div class="lbl">陳建元 教授</div><div class="txt">全程同行</div></div>
+        <div class="info-row"><div class="lbl">王靚琇 副教授</div><div class="txt">部分同行——11/11 不隨團出發；11/12 晚或 11/13 即提前離隊；交通自理。</div></div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:24px">🤝 金門端接待</h2>
+    <div class="card">
+      <div class="infolist">
+        <div class="info-row"><div class="lbl">張慕白 學長</div><div class="txt">金門逢甲校友會會長，本次行程地陪／承辦窗口</div></div>
+        <div class="info-row"><div class="lbl">吳政庭 老師</div><div class="txt">國立金門大學，11/11 校園參訪暨專題演講共同主講人</div></div>
+      </div>
     </div>
 
     <div class="note-box" style="margin-top:16px"><b>⚠️ 以上行程建議為暫訂</b>　另屆時如需視天候、交通、各單位安排進行調整，還請理解；主辦單位保有最終調整、解釋之權利。</div>
@@ -226,6 +276,20 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
     </div>
   </section>
 
+  <!-- 地圖 -->
+  <section data-tab="map">
+    <h2>🗺 行程地圖</h2>
+    <div class="card">
+      <p class="lead" style="margin-top:0">標註四天行程的主要地點，顏色對應日期。點選圖釘可開啟 Google 地圖導航。</p>
+      <div id="map"></div>
+      <div class="legend" id="legend"></div>
+      <div class="note-box watch" style="margin-top:14px"><b>提醒</b>　部分地點（如金許園、新天地餐廳、喜悅小館、地政局、民宿等）未能查得精確門牌，地圖上標記為概略位置；實際導航請一律點圖釘內的 Google 地圖連結，以地點名稱搜尋為準。</div>
+    </div>
+
+    <h2 style="margin-top:24px">📍 地點清單</h2>
+    <div class="card"><ul class="spotlist" id="spotlist"></ul></div>
+  </section>
+
   <!-- 住宿 -->
   <section data-tab="stay">
     <h2>🏮 住宿安排</h2>
@@ -233,7 +297,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
       <p class="lead" style="margin-top:0">入住獲得 <b>2023 年第一屆台灣觀光金獎</b>、<b>2024 百大金質好客民宿</b> 之閩南古厝旅店：<b>古寧歇心苑</b> 及 <b>日玥居</b>、<b>湖光悠宅</b> 等，體驗在台閩最美的閩南濕地聚落－古寧頭，感受歷史之傳統閩南及官宅建築住居、人文史蹟特色解說。</p>
       <div class="note-box watch" style="margin-top:14px"><b>待補</b>　行程單目前只列出民宿名稱，尚未標明「哪一晚住哪一間」。3 晚（11/11、11/12、11/13）的分房對照表，待承辦方（張慕白學長）確認後補上。</div>
     </div>
-    <div class="grid g2" style="margin-top:14px">
+    <div class="grid g3" style="margin-top:14px">
       <div class="card"><b>古寧歇心苑</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
       <div class="card"><b>日玥居</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
       <div class="card"><b>湖光悠宅</b><div class="lead" style="margin-top:6px">閩南古厝旅店，古寧頭聚落。</div></div>
@@ -268,12 +332,12 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
     <h2 style="margin-top:24px">❓ 待確認</h2>
     <div class="card">
-      <table><tbody>
-        <tr><td style="width:90px"><b>楊秉樺</b></td><td>人在群組但接龍兩邊皆未表態，待私訊確認</td></tr>
-        <tr><td><b>吳瑾瑜</b></td><td>非本屆修課同學，已確認是本課修課生，尚未接龍</td></tr>
-        <tr><td><b>施潔伶</b></td><td>先前曾列參加，最新版本已移至請假，待本人確認</td></tr>
-        <tr><td><b>陳柏翰</b></td><td>先前曾列參加，最新版本已移至請假，待本人確認</td></tr>
-      </tbody></table>
+      <div class="infolist">
+        <div class="info-row"><div class="lbl">楊秉樺</div><div class="txt muted">人在群組但接龍兩邊皆未表態，待私訊確認</div></div>
+        <div class="info-row"><div class="lbl">吳瑾瑜</div><div class="txt muted">非本屆修課同學，已確認是本課修課生，尚未接龍</div></div>
+        <div class="info-row"><div class="lbl">施潔伶</div><div class="txt muted">先前曾列參加，最新版本已移至請假，待本人確認</div></div>
+        <div class="info-row"><div class="lbl">陳柏翰</div><div class="txt muted">先前曾列參加，最新版本已移至請假，待本人確認</div></div>
+      </div>
     </div>
 
     <h2 style="margin-top:24px">🙅 請假（23 位）</h2>
@@ -289,6 +353,41 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
     </div></div>
   </section>
 
+  <!-- 代辦 -->
+  <section data-tab="todo">
+    <h2>✅ 代辦事項</h2>
+    <div class="todo">
+      <div class="todo-item">
+        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">催楊秉樺接龍</span></div>
+        <div class="who">人在群組但兩邊皆未表態，建議私訊而非群組公開點名</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">催吳瑾瑜接龍</span></div>
+        <div class="who">已確認是本課修課同學，尚未表態參加或請假</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip wait">待回覆</span><span class="t">確認施潔伶、陳柏翰是否本人改為請假</span></div>
+        <div class="who">兩人先前都曾列在參加名單，最新版本移至請假區</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip wait">待回覆</span><span class="t">私訊張慕白：人數門檻、報價彈性、單人房數量</span></div>
+        <div class="who">草稿已備妥，待發送｜目前 15 人（同學14＋全程師長1），距 20 人下限差 5 位</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip wait">待回覆</span><span class="t">跟張慕白要 3 晚民宿分房對照表</span></div>
+        <div class="who">古寧歇心苑／日玥居／湖光悠宅，目前不知道哪一晚住哪一間</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip todo">待催繳</span><span class="t">已接龍同學回報房型意願（雙人／單人）</span></div>
+        <div class="who">單人房 24,400／位，數量有限，先訂先得</div>
+      </div>
+      <div class="todo-item">
+        <div class="top"><span class="status-chip progress">追蹤中</span><span class="t">王靚琇老師僅 11/12–13 部分同行</span></div>
+        <div class="who">統計每日車輛／座位人數時需個別扣除 11/11、11/14 兩天</div>
+      </div>
+    </div>
+  </section>
+
   <!-- 費用 -->
   <section data-tab="cost">
     <h2>💰 行程費用</h2>
@@ -299,14 +398,14 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
 
     <h2 style="margin-top:24px">📦 預算含括項目</h2>
     <div class="card">
-      <table><tbody>
-        <tr><td>✈️</td><td>台中－金門來回機票</td></tr>
-        <tr><td>🏮</td><td>金門住宿 3 晚</td></tr>
-        <tr><td>🎫</td><td>四天景點＋活動門票</td></tr>
-        <tr><td>🍽️</td><td>四天早、午、晚共 9 餐</td></tr>
-        <tr><td>🚌</td><td>四天金門交通（遊覽車行程與接送費用）＋專業導覽</td></tr>
-        <tr><td>🛡️</td><td>旅遊平安保險（200 萬／人）</td></tr>
-      </tbody></table>
+      <div class="budgetlist">
+        <div class="budgetrow"><span class="ic">✈️</span><span>台中－金門來回機票</span></div>
+        <div class="budgetrow"><span class="ic">🏮</span><span>金門住宿 3 晚</span></div>
+        <div class="budgetrow"><span class="ic">🎫</span><span>四天景點＋活動門票</span></div>
+        <div class="budgetrow"><span class="ic">🍽️</span><span>四天早、午、晚共 9 餐</span></div>
+        <div class="budgetrow"><span class="ic">🚌</span><span>四天金門交通（遊覽車行程與接送費用）＋專業導覽</span></div>
+        <div class="budgetrow"><span class="ic">🛡️</span><span>旅遊平安保險（200 萬／人）</span></div>
+      </div>
     </div>
   </section>
 
@@ -330,13 +429,94 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
   </footer>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+// 日期色票
+const DAYC = {'11/11':'#b8432b','11/12':'#bb8a2e','11/13':'#3f6f63','11/14':'#6a4fae'};
+function gmap(q){ return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q); }
+
+// approx:true 表示地址未能查得精確門牌，座標為概略位置（僅供整體方位參考，導航請用連結）
+const spots = [
+  {name:'金門大學', lat:24.4475, lng:118.3650, day:'11/11', q:'國立金門大學', approx:true, ds:'拜訪都景系、專題演講'},
+  {name:'金門牛家莊', lat:24.4315, lng:118.3183, day:'11/11', q:'金門牛家莊', approx:false, ds:'晚餐・全牛大餐'},
+  {name:'金門不動產建築開發商業同業公會', lat:24.4335, lng:118.3175, day:'11/12', q:'金門縣不動產建築開發商業同業公會', approx:true, ds:'產業交流'},
+  {name:'莒光樓', lat:24.4322, lng:118.3188, day:'11/12', q:'莒光樓 金門', approx:false, ds:'地標＋電話亭'},
+  {name:'記德海鮮餐廳', lat:24.4595, lng:118.3085, day:'11/12', q:'記德海鮮餐廳 金門', approx:false, ds:'午餐・海鮮'},
+  {name:'金門縣地政局', lat:24.4352, lng:118.3183, day:'11/12', q:'金門縣地政局', approx:true, ds:'拜訪局長'},
+  {name:'經武酒窖', lat:24.4455, lng:118.3850, day:'11/12', q:'經武酒窖 金酒', approx:true, ds:'儲酒坑道・試飲'},
+  {name:'總兵署／模範街', lat:24.4332, lng:118.3172, day:'11/12', q:'金門總兵署', approx:false, ds:'金城市區巡禮'},
+  {name:'金許園', lat:24.4330, lng:118.3160, day:'11/12', q:'金許園 金門', approx:false, ds:'晚餐・手路菜'},
+  {name:'金門縣立博物館', lat:24.4395, lng:118.3210, day:'11/13', q:'金門歷史民俗博物館', approx:true, ds:'金門學基底'},
+  {name:'沙美老街', lat:24.4718, lng:118.4010, day:'11/13', q:'沙美老街 金門', approx:false, ds:'頹屋新生＋糕點'},
+  {name:'新天地餐廳', lat:24.4350, lng:118.4005, day:'11/13', q:'新天地餐廳 金門', approx:true, ds:'午餐・海鮮粥'},
+  {name:'昇恆昌金湖廣場', lat:24.4345, lng:118.4015, day:'11/13', q:'昇恆昌金湖廣場', approx:false, ds:'免稅購物'},
+  {name:'山后民俗文化村', lat:24.4875, lng:118.4186, day:'11/13', q:'山后民俗文化村', approx:false, ds:'古厝聚落＋砲操'},
+  {name:'獅山砲陣地', lat:24.4860, lng:118.4175, day:'11/13', q:'獅山砲陣地', approx:false, ds:'坑道式榴彈砲'},
+  {name:'馬山觀測所', lat:24.5080, lng:118.3980, day:'11/13', q:'馬山觀測所', approx:false, ds:'天下第一哨'},
+  {name:'喜悅小館', lat:24.4345, lng:118.4010, day:'11/13', q:'喜悅小館 金門', approx:true, ds:'晚餐・新中式'},
+  {name:'擎天廳', lat:24.4425, lng:118.3745, day:'11/14', q:'擎天廳 金門', approx:false, ds:'戰地秘境必訪'},
+  {name:'陳景蘭洋樓・成功坑道・金湯公園', lat:24.4280, lng:118.4090, day:'11/14', q:'陳景蘭洋樓', approx:false, ds:'規模最大洋樓'},
+  {name:'成功鍋貼', lat:24.4278, lng:118.4085, day:'11/14', q:'成功鍋貼 金門', approx:true, ds:'午餐・鍋貼酸辣湯'},
+  {name:'尚義機場', lat:24.4312, lng:118.3598, day:'11/14', q:'金門尚義機場', approx:false, ds:'賦歸'},
+  {name:'古寧頭民宿聚落', lat:24.4745, lng:118.2855, day:'住宿', q:'古寧頭 金門', approx:true, ds:'古寧歇心苑／日玥居／湖光悠宅'},
+];
+
+// 地圖延遲初始化：分頁預設是隱藏的（display:none），若在隱藏狀態建立 Leaflet
+// 地圖，容器尺寸算成 0 會導致縮放／置中全部跑掉，所以改成第一次切到「地圖」
+// 分頁時才真正建立。
+let map = null;
+function initMap(){
+  if(map) return;
+  map = L.map('map').setView([24.452, 118.370], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {maxZoom:18, attribution:'© OpenStreetMap'}).addTo(map);
+
+  const bounds = [];
+  spots.forEach(s=>{
+    const color = DAYC[s.day] || '#8d887c';
+    const m = L.circleMarker([s.lat,s.lng],
+      {radius:8, color:'#fff', weight:2, fillColor:color, fillOpacity:1, dashArray:s.approx?'2,2':null}).addTo(map);
+    m.bindPopup('<b>'+s.name+'</b><br><span style="color:#666;font-size:12px">'+s.ds+(s.approx?'　<i>(位置概略)</i>':'')+'</span><br>'+
+      '<a href="'+gmap(s.q)+'" target="_blank" style="color:#b8432b;font-weight:700">→ Google 地圖導航</a>');
+    bounds.push([s.lat,s.lng]);
+  });
+  map.fitBounds(bounds, {padding:[24,24]});
+}
+
+// 圖例
+const legend = document.getElementById('legend');
+Object.keys(DAYC).forEach(d=>{
+  const el = document.createElement('span');
+  el.innerHTML = '<i style="background:'+DAYC[d]+'"></i>'+d;
+  legend.appendChild(el);
+});
+const el2 = document.createElement('span');
+el2.innerHTML = '<i style="background:#8d887c"></i>住宿';
+legend.appendChild(el2);
+
+// 地點清單
+const ul = document.getElementById('spotlist');
+const dayOrder = ['11/11','11/12','11/13','11/14','住宿'];
+dayOrder.forEach(d=>{
+  spots.filter(s=>s.day===d).forEach(s=>{
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="nm">'+d+'　'+s.name+(s.approx?' <span class="approx">(位置概略)</span>':'')+'</span>'+
+      '<a href="'+gmap(s.q)+'" target="_blank">地圖 ↗</a>';
+    ul.appendChild(li);
+  });
+});
+
+// 分頁切換（含地圖重繪，避免在隱藏分頁初始化時尺寸計算錯誤）
 const tabs=document.querySelectorAll('.tab-btn');
 const secs=document.querySelectorAll('section[data-tab]');
 function activate(name){
   tabs.forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
   secs.forEach(s=>s.classList.toggle('show', s.dataset.tab===name));
   try{ localStorage.setItem('kinmen-tab', name); }catch(e){}
+  if(name==='map'){
+    initMap();
+    setTimeout(()=>map.invalidateSize(), 60);
+  }
 }
 tabs.forEach(b=>b.addEventListener('click', ()=>activate(b.dataset.tab)));
 let initial='overview';
