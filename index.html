@@ -139,6 +139,10 @@ th{color:var(--sub);font-weight:700;font-size:12.5px;}
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:12.5px;color:var(--sub);}
 .legend span{display:inline-flex;align-items:center;gap:6px;}
 .legend i{width:11px;height:11px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);}
+.splgroup{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:10px;}
+.splgroup:first-child{margin-top:0;}
+.splhead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;margin-bottom:8px;}
+.splhead i{width:11px;height:11px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);flex:none;}
 .spotlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
 .spotlist li{padding:10px 0;border-top:1px solid var(--line);font-size:13.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
 .spotlist li:first-child{border-top:none;}
@@ -269,7 +273,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:v
     </div>
 
     <h2 style="margin-top:24px">📍 地點清單</h2>
-    <div class="card"><ul class="spotlist" id="spotlist"></ul></div>
+    <div id="spotlist"></div>
   </section>
 
   <!-- 住宿 -->
@@ -455,17 +459,33 @@ const el2 = document.createElement('span');
 el2.innerHTML = '<i style="background:#8d887c"></i>住宿';
 legend.appendChild(el2);
 
-// 地點清單
-const ul = document.getElementById('spotlist');
+// 地點清單：同一天聚成一個區塊，不逐列重複日期
+const spotlistEl = document.getElementById('spotlist');
 const dayOrder = ['11/11','11/12','11/13','11/14','住宿'];
 dayOrder.forEach(d=>{
+  const daySpots = spots.filter(s=>s.day===d);
+  if(!daySpots.length) return;
   const dLabel = d==='住宿' ? '住宿' : dayLabel(d);
-  spots.filter(s=>s.day===d).forEach(s=>{
+  const color = DAYC[d] || '#8d887c';
+
+  const group = document.createElement('div');
+  group.className = 'splgroup';
+
+  const head = document.createElement('div');
+  head.className = 'splhead';
+  head.innerHTML = '<i style="background:'+color+'"></i>'+dLabel;
+  group.appendChild(head);
+
+  const ul = document.createElement('ul');
+  ul.className = 'spotlist';
+  daySpots.forEach(s=>{
     const li = document.createElement('li');
-    li.innerHTML = '<span class="nm">'+dLabel+'　'+s.name+(s.approx?' <span class="approx">(位置概略)</span>':'')+'</span>'+
+    li.innerHTML = '<span class="nm">'+s.name+(s.approx?' <span class="approx">(位置概略)</span>':'')+'</span>'+
       '<a href="'+gmap(s.q)+'" target="_blank">地圖 ↗</a>';
     ul.appendChild(li);
   });
+  group.appendChild(ul);
+  spotlistEl.appendChild(group);
 });
 
 // 分頁切換（含地圖重繪，避免在隱藏分頁初始化時尺寸計算錯誤）
